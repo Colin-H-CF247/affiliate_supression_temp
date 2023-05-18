@@ -1,0 +1,5 @@
+live_model: TemplateModel1
+service_name: template-service-name
+ml_studio_name: mlw-ml-dev
+resource_group: rg-data-science-dev 
+subscription_id: 6cbe45a0-6565-4c4a-b1a9-0929f276bbcd

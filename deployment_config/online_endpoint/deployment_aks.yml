@@ -1,0 +1,13 @@
+$schema: https://azuremlschemas.azureedge.net/latest/kubernetesOnlineDeployment.schema.json
+name: template-deployment-name
+namespace: template-aks-service
+type: kubernetes
+endpoint_name: template-aks-service
+code_configuration:
+  code: ../src/datascience_service
+  scoring_script: score.py
+environment: 
+  conda_file: ./conda_env.yml
+  image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04:latest
+request_settings:
+  request_timeout_ms: 3000

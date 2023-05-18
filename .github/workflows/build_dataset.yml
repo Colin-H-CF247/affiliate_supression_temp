@@ -1,0 +1,43 @@
+# Idea being that this triggers one of the databricks 'jobs' to run. Whether this is in the form of a notebook or a dbx task. 
+
+# Should be self contained. The cluster setup script will be sent here, along with the dbutils secrets
+
+name: Build Dataset
+
+on: workflow_dispatch
+
+
+jobs:
+  setup-databricks:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+    environment: dev
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN:  ${{ secrets.DATABRICKS_TOKEN }}
+      STORAGE_ACCOUNT: ${{secrets.STORAGE_ACCOUNT}}
+      STORAGE_ACCOUNT_KEY: ${{secrets.STORAGE_ACCOUNT_KEY}}
+      SP_CLIENT_ID: ${{secrets.SERVICE_PRINCIPLE_CLIENT_ID}}
+      SP_CLIENT_ID_KEY: "sp_client_id" 
+      SP_TENANT_ID: ${{secrets.SERVICE_PRINCIPLE_TENANT_ID}}
+      SP_TENANT_ID_KEY: "sp_tenant_id" 
+      SP_SECRET: ${{secrets.SERVICE_PRINCIPLE_SECRET_KEY}}
+      SP_SECRET_KEY: "sp_secret_key" 
+      DBUTILS_SCOPE: 'data_science_template_project'
+
+    steps:
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      
+      - name: Setup databricks
+        working-directory: ./dbx_prime_prediction_pipelines
+        run: |
+          bash .github/workflows/databricks_setup.sh
+
+      - name: Deploy the workflow as a job
+        working-directory: ./dbx_prime_prediction_pipelines
+        run: |
+          bash .github/workflows/databricks_trigger_job.sh "databricks_dataset_job.json" "template_dataset_build"

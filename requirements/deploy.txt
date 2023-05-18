@@ -1,0 +1,10 @@
+mlflow==2.3.2
+mlflow-skinny==2.3.2
+azureml-defaults
+azureml-mlflow>=1.50.0
+azure-keyvault-secrets
+azure-identity
+azure-ml-api-sdk
+pandas==1.4.2
+azureml-core==1.50.0
+datascience-core @ git+https://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@github.com/Carfinance247/datascience_core@main#egg=datascience-core

@@ -1,0 +1,55 @@
+{
+    "name": "template_model_training",
+    "new_cluster": {
+        "num_workers": 0,
+        "cluster_name": "Train Cluster",
+        "spark_version": "11.3.x-scala2.12",
+        "spark_conf": {
+            "spark.databricks.cluster.profile": "singleNode",
+            "spark.master": "local[*, 4]"
+        },
+        "azure_attributes": {
+            "first_on_demand": 1,
+            "availability": "ON_DEMAND_AZURE",
+            "spot_bid_max_price": -1
+        },
+        "node_type_id": "Standard_E8_v3",
+        "driver_node_type_id": "Standard_E8_v3",
+        "ssh_public_keys": [],
+        "custom_tags": {
+            "ResourceClass": "SingleNode"
+        },
+        "spark_env_vars": {
+            "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+        },
+        "autotermination_minutes": 30,
+        "enable_elastic_disk": true,
+        "cluster_source": "UI",
+        "init_scripts": [
+            {
+                "dbfs": {
+                    "destination": "dbfs:/Shared/dbx/cluster_init_scripts/template_cluster_setup.sh"
+                }
+            }
+        ],
+        "enable_local_disk_encryption": false,
+        "data_security_mode": "NONE",
+        "runtime_engine": "PHOTON",
+        "cluster_id": "template-cluster-id"
+    },
+    "email_notifications": {
+      "on_start": [],
+      "on_success": [],
+      "on_failure": []
+    },
+    "notification_settings": {
+      "no_alert_for_skipped_runs": false,
+      "no_alert_for_canceled_runs": false,
+      "alert_on_last_attempt": false
+    },
+    "timeout_seconds": 3600,
+    "max_retries": 1,
+    "notebook_task": {
+      "notebook_path": "/dbfs/Shared/train_jobs/template_train_job.ipynb"
+    }
+  }

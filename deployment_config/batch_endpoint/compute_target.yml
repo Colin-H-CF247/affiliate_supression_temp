@@ -1,0 +1,11 @@
+$schema: https://azuremlschemas.azureedge.net/latest/amlCompute.schema.json 
+name: batch-inference-cluster
+type: amlcompute
+size: STANDARD_E8_v3
+min_instances: 0
+max_instances: 5
+idle_time_before_scale_down: 120
+identity:
+  type: user_assigned
+  user_assigned_identities: 
+    - resource_id: "/subscriptions/6cbe45a0-6565-4c4a-b1a9-0929f276bbcd/resourceGroups/rg-data-science-dev/providers/Microsoft.ManagedIdentity/userAssignedIdentities/managed-identity-rg-data-science-dev"

@@ -1,0 +1,42 @@
+name: Deploy to Azure Batch Endpoint
+on: [workflow_dispatch]
+
+jobs:
+  set_env:
+    runs-on: ['self-hosted', 'linux', 'new-runner']
+    steps:
+      - name: Set env to production
+        id: env_step
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/deployment_prod_aks" ]; then
+            echo "ENVIRONMENT=prod" >> "$GITHUB_OUTPUT"
+          else
+            echo "ENVIRONMENT=dev" >> "$GITHUB_OUTPUT"
+          fi  
+    outputs:
+      env_name: ${{ steps.env_step.outputs.ENVIRONMENT }}
+  deploy_to_azure:
+    needs: [set_env]
+    environment: ${{ needs.set_env.outputs.env_name }}
+    env:
+      AZURE_ENVIRONMENT_NAME: ${{ vars.AZURE_ENVIRONMENT_NAME }}
+      AZURE_DATA_LAKE: ${{ vars.AZURE_DATA_LAKE }}
+      AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+      AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }} 
+      AZURE_ML_WORKSPACE: ${{ vars.AZURE_ML_WORKSPACE }}
+
+    runs-on: ['self-hosted', 'linux', 'new-runner']
+    timeout-minutes: 9
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+      - name: Setup CLI
+        run: |
+          bash .github/workflows/scripts/setup_az_cli.py
+        continue-on-error: true
+      - run: |
+          bash ./github/workflows/scripts/deploy_batch_endpoint.sh

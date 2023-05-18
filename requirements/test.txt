@@ -1,0 +1,9 @@
+coverage 
+black 
+# pytest-sugar 
+pytest
+genbadge
+azureml-core==1.50.0
+flask>=2.0.0
+azureml-inference-server-http==0.8.4
+datascience-core @ git+https://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@github.com/Carfinance247/datascience_core@main#egg=datascience-core

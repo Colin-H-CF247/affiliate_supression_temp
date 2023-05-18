@@ -1,0 +1,49 @@
+# .github/workflows/app.yaml
+name: Continuous Integration
+on:
+  pull_request:
+    branches:
+      - main
+      - deployment_dev_aks
+      - deployment_prod_aks
+jobs:
+  set_env:
+    runs-on: ubuntu-latest
+    steps:
+      - name: determine environment to run on
+        id: env_step
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/deployment_prod_aks" ]; then
+            echo "ENVIRONMENT=prod" >> "$GITHUB_OUTPUT"
+          else
+            echo "ENVIRONMENT=dev" >> "$GITHUB_OUTPUT"
+          fi  
+    outputs:
+      env_name: ${{ steps.env_step.outputs.ENVIRONMENT }}
+  run_tox_on_repo:
+    needs: [set_env]
+    environment: ${{ needs.set_env.outputs.env_name }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    env:
+      AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install "tox<=4.0.0"
+      - name: Run tox
+        run: |
+          python -c "import sys; print(sys.platform)"
+          python -m tox -e lin-tests

@@ -1,0 +1,4 @@
+$schema: https://azuremlschemas.azureedge.net/latest/batchEndpoint.schema.json
+name: prime-predictions-batch-endpoint
+description: Prime Predictions batch endpoint. Returns the prime confidence for all rows (customers) and all models available.
+auth_mode: aad_token

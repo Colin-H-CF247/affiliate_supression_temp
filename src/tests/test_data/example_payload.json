@@ -1,0 +1,38 @@
+[
+    {
+        "index": "Model",
+        "0": "model_name"
+    },
+    {
+        "index": "MedInc",
+        "0": 1.0
+    },
+    {
+        "index": "HouseAge",
+        "0": 1.0
+    },
+    {
+        "index": "AveRooms",
+        "0": 1.0
+    },
+    {
+        "index": "AveBedrms",
+        "0": 1.0
+    },
+    {
+        "index": "Population",
+        "0": 1.0
+    },
+    {
+        "index": "AveOccup",
+        "0": 1.0
+    },
+    {
+        "index": "Latitude",
+        "0": 1.0
+    },
+    {
+        "index": "Longitude",
+        "0": 1.0
+    }
+]
